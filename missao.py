@@ -1,9 +1,10 @@
+from status import status_missao
 class Missao:
     def __init__(self, nome:str, descricao:str, recompensa:int):
         self.nome = nome
         self.descricao = descricao
         self.recompensa = recompensa
-        self.__status = "Pendente"
+        self.__status = status_missao.PENDENETE.value
     
     @property
     def nome(self):
@@ -44,13 +45,13 @@ class Missao:
         if novo_status.__class__ != str:
             raise Exception("Status Inválido")
         novo_status = novo_status.strip().title()
-        if (novo_status != "Pendente" and novo_status != "Em Andamento" and novo_status != "Concluida"):
-            raise Exception("Status tem que ser Pendende , Em Andamento ou Conluida")
-        if (self.__status == "Pendente" and novo_status != "Em Andamento"):
-            raise Exception(f"Status atual: {self.__status } (Só pode ser alterado para Em Andamento)")
-        if (self.__status == "Em Andamento" and novo_status != "Concluida"):
-            raise Exception(f"Status atual: {self.__status } (Só pode ser alterado para Concluida)")
-        if (self.__status == "Concluida"):
+        if (novo_status != status_missao.EM_ANDAMENTO.value and novo_status != status_missao.EM_ANDAMENTO.value and novo_status != status_missao.CONCLUIDA.value):
+            raise Exception(F"Status tem que ser {status_missao.PENDENTE.value } , {status_missao.EM_ANDAMENTO.value } ou {status_missao.CONCLUIDA.value }")
+        if (self.__status == status_missao.PENDENTE.value and novo_status != status_missao.EM_ANDAMENTO.value):
+            raise Exception(f"Status atual: {self.__status } (Só pode ser alterado para {status_missao.EM_ANDAMENTO.value})")
+        if (self.__status == status_missao.EM_ANDAMENTO.value and novo_status != status_missao.CONCLUIDA.value):
+            raise Exception(f"Status atual: {self.__status } (Só pode ser alterado para {status_missao.CONCLUIDA.value})")
+        if (self.__status == status_missao.CONCLUIDA.value):
             raise Exception(f"Status atual: {self.__status } (A tarefa já foi concluida e não pode mudar) ")
 
 
