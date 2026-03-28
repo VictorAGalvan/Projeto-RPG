@@ -4,7 +4,7 @@ class Missao:
         self.nome = nome
         self.descricao = descricao
         self.recompensa = recompensa
-        self.__status = status_missao.PENDENETE.value
+        self.__status = status_missao.PENDENTE.value
     
     @property
     def nome(self):
@@ -44,18 +44,25 @@ class Missao:
     def status(self, novo_status:str):
         if novo_status.__class__ != str:
             raise Exception("Status Inválido")
-        novo_status = novo_status.strip().title()
-        if (novo_status != status_missao.EM_ANDAMENTO.value and novo_status != status_missao.EM_ANDAMENTO.value and novo_status != status_missao.CONCLUIDA.value):
-            raise Exception(F"Status tem que ser {status_missao.PENDENTE.value } , {status_missao.EM_ANDAMENTO.value } ou {status_missao.CONCLUIDA.value }")
-        if (self.__status == status_missao.PENDENTE.value and novo_status != status_missao.EM_ANDAMENTO.value):
-            raise Exception(f"Status atual: {self.__status } (Só pode ser alterado para {status_missao.EM_ANDAMENTO.value})")
-        if (self.__status == status_missao.EM_ANDAMENTO.value and novo_status != status_missao.CONCLUIDA.value):
-            raise Exception(f"Status atual: {self.__status } (Só pode ser alterado para {status_missao.CONCLUIDA.value})")
-        if (self.__status == status_missao.CONCLUIDA.value):
-            raise Exception(f"Status atual: {self.__status } (A tarefa já foi concluida e não pode mudar) ")
+        novo_status = novo_status.strip().upper()
+        if (novo_status not in status_missao):
+            raise Exception(F"Status tem que ser {status_missao.PENDENTE.value } , {status_missao.EM_ANDAMENTO.value } ou {status_missao.CONCLUIDA.value } ou {status_missao.FRACASSADA.value}")
+        index = 0
 
-
+        fluxo = [status_missao.PENDENTE.value, status_missao.EM_ANDAMENTO.value, [status_missao.CONCLUIDA.value,status_missao.FRACASSADA.value]]
+        for i in len(fluxo) :
+            if (fluxo[i] == self.status):
+                index = i
+                break
+        if (self.status in fluxo[0:2]):
+            if (novo_status != fluxo[index+1]):
+                 raise Exception(f"Status atual: {self.__status } (Só pode ser alterado para {fluxo[index+1]})")
+        else: 
+            if (novo_status != fluxo[3][0] and novo_status != fluxo[3][1]):
+                 raise Exception(f"Status atual: {self.__status } (Só pode ser alterado para {fluxo[index+1][0]} ou {fluxo[index+1][1]} )")
+       
         self.__status = novo_status
+
     def exibir_dados(self):
         print(f"Nome missão: {self.__nome}")
         print(f"descrição: {self.__descricao}")
@@ -73,3 +80,17 @@ class Missao:
             return True
         
         return False
+    
+    def iniciar_missao(self):
+        if (self.status == status_missao.PENDENTE.value):
+            self.status = status_missao.EM_ANDAMENTO.value
+            print(f"A missão {self.nome} começou! Objetivo central da missão: {self.descricao}")
+        else:
+            raise Exception("Missão não é mais pendente e não pode ser alterada!")
+    
+    def concluir_missao(self):
+        if (self.status == status_missao.EM_ANDAMENTO.value):
+            self.status = status_missao.CONCLUIDA.value
+            print(f"Missão concluída como sucesso. A contabilidade do prêmio de {self.recompensa} XP agora está pronta para retirada financeira.")
+        else: 
+            raise Exception("Missão está em um status que não é EM ANDAMENTO e não pode ser alterada!")

@@ -3,7 +3,7 @@ from personagem import Personagem
 try:
     p1 = Personagem("Victor")
     m1 = Missao("Matar dragão", "matar o Dragão de Fogo em tal lugar", 10)
-    m1.status= "Concluida"
+    m1.status="em andamento"
 except Exception as e:
     print(e)
 else:
