@@ -1,8 +1,8 @@
 from missao import Missao
-class Missao_Combate(Missao):
+class MissaoCombate(Missao):
     def __init__(self, nome:str, descricao:str, recompensa:int, tipo_inimigo:str, inimigos_a_derrotar:int):
-        self.__tipo_inimigo = tipo_inimigo
-        self.__inimigos_a_derrotar = inimigos_a_derrotar
+        self.tipo_inimigo = tipo_inimigo
+        self.inimigos_a_derrotar = inimigos_a_derrotar
         super().__init__(nome, descricao, recompensa)
     @property
     def tipo_inimigo(self):
@@ -15,7 +15,7 @@ class Missao_Combate(Missao):
         if (tipo_inimigo.__class__ != str):
             raise Exception("Tipo de inimigo inválido")
         self.__tipo_inimigo = tipo_inimigo  
-    @tipo_inimigo.setter
+    @inimigos_a_derrotar.setter
     def inimigos_a_derrotar(self,inimigos_a_derrotar:int):
         if (inimigos_a_derrotar.__class__ != int):
             raise Exception("Tipo de inimigo inválido")

@@ -45,22 +45,23 @@ class Missao:
         if novo_status.__class__ != str:
             raise Exception("Status Inválido")
         novo_status = novo_status.strip().upper()
-        if (novo_status not in status_missao):
-            raise Exception(F"Status tem que ser {status_missao.PENDENTE.value } , {status_missao.EM_ANDAMENTO.value } ou {status_missao.CONCLUIDA.value } ou {status_missao.FRACASSADA.value}")
-        index = 0
-
-        fluxo = [status_missao.PENDENTE.value, status_missao.EM_ANDAMENTO.value, [status_missao.CONCLUIDA.value,status_missao.FRACASSADA.value]]
-        for i in len(fluxo) :
-            if (fluxo[i] == self.status):
-                index = i
-                break
-        if (self.status in fluxo[0:2]):
-            if (novo_status != fluxo[index+1]):
-                 raise Exception(f"Status atual: {self.__status } (Só pode ser alterado para {fluxo[index+1]})")
-        else: 
-            if (novo_status != fluxo[3][0] and novo_status != fluxo[3][1]):
-                 raise Exception(f"Status atual: {self.__status } (Só pode ser alterado para {fluxo[index+1][0]} ou {fluxo[index+1][1]} )")
-       
+        
+        status_validos = [status_missao.PENDENTE.value, status_missao.EM_ANDAMENTO.value, 
+                         status_missao.CONCLUIDA.value, status_missao.FRACASSADA.value]
+        if novo_status not in status_validos:
+            raise Exception(f"Status tem que ser {status_missao.PENDENTE.value}, {status_missao.EM_ANDAMENTO.value}, {status_missao.CONCLUIDA.value} ou {status_missao.FRACASSADA.value}")
+        
+        if self.__status == status_missao.PENDENTE.value:
+            if novo_status != status_missao.EM_ANDAMENTO.value:
+                raise Exception(f"Status atual: {self.__status} (Só pode ser alterado para {status_missao.EM_ANDAMENTO.value})")
+        
+        elif self.__status == status_missao.EM_ANDAMENTO.value:
+            if novo_status != status_missao.CONCLUIDA.value and novo_status != status_missao.FRACASSADA.value:
+                raise Exception(f"Status atual: {self.__status} (Só pode ser alterado para {status_missao.CONCLUIDA.value} ou {status_missao.FRACASSADA.value})")
+        
+        elif self.__status == status_missao.CONCLUIDA.value or self.__status == status_missao.FRACASSADA.value:
+            raise Exception(f"Status atual: {self.__status} (Missão finalizada, não pode ser alterada)")
+        
         self.__status = novo_status
 
     def exibir_dados(self):
