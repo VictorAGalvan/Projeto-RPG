@@ -1,6 +1,6 @@
 from missao import Missao
 class MissaoExploracao(Missao):
-    def __init__(self, nome:str, descricao:str, recompensa:str, local:str, distancia_em_km:float,tempo_limite:int):
+    def __init__(self, nome:str, descricao:str, recompensa:int, local:str, distancia_em_km:float,tempo_limite:int):
         self.local = local
         self.distancia = distancia_em_km
         self.tempo_limite = tempo_limite

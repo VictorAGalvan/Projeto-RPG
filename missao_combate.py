@@ -21,8 +21,8 @@ class MissaoCombate(Missao):
             raise Exception("Tipo de inimigo inválido")
         self.__inimigos_a_derrotar = inimigos_a_derrotar 
     def __str__(self):
-        tamanho = len(self.__nome)
-        text = super()        
+        tamanho = len(self.nome)
+        text = super().__str__()  
         return f"{text} \nTipo de inimigo: {self.tipo_inimigo} \nInimigos a derrotar: {self.inimigos_a_derrotar}"
     
 
