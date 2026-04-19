@@ -56,3 +56,18 @@ class MissaoExploracao(Missao):
         print(f"Local: {self.local}")
         print(f"Distância: {self.distancia} km")
         print(f"Tempo limite: {self.tempo_limite} horas")
+    def concluir_missao(self, valores:list):
+        if(valores.__class__ != list):
+            raise Exception("Os valores dessa missão tem que vir como uma lista") 
+        distancia = valores[0]
+        tempo = valores[1]
+
+        if (distancia.__class__ != float):
+            raise Exception("Distancia tem que ser um float")
+        if (tempo.__class__ != int):
+            raise Exception("Tempo tem que ser um inteiro")
+        if (distancia >= self.__distancia and tempo <= self.__tempo_limite):
+            super().concluir_missao()
+            return True
+        else:
+            return False

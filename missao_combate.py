@@ -36,3 +36,12 @@ class MissaoCombate(Missao):
         super().exibir_dados()
         print(f"Tipo de inimigo: {self.tipo_inimigo}")
         print(f"Inimigos a derrotar: {self.inimigos_a_derrotar}")
+
+    def concluir_missao(self, inimigos:int):
+        if (inimigos.__class__ != int):
+            raise Exception("Inimigos tem que ser um inteiro")
+        if (inimigos >= self.__inimigos_a_derrotar):
+            super().concluir_missao()
+            return True
+        else:
+            return False

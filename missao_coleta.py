@@ -37,4 +37,12 @@ class MissaoColeta(Missao):
         super().exibir_dados()
         print(f"Item: {self.item}")
         print(f"Quantidade: {self.quantidade}")    
+    def concluir_missao(self, quantidade:int):
+        if (quantidade.__class__ != int):
+            raise Exception("Quantidade tem que ser um inteiro")
+        if (quantidade >= self.__quantidade):
+            super().concluir_missao()
+            return True
+        else:
+            return False
     
