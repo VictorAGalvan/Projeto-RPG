@@ -1,4 +1,5 @@
 from missao import Missao
+from exception_geral import ExceptionGeral
 class MissaoExploracao(Missao):
     def __init__(self, nome:str, descricao:str, recompensa:int, local:str, distancia_em_km:float,tempo_limite:int):
         self.local = local
@@ -20,22 +21,22 @@ class MissaoExploracao(Missao):
     @local.setter
     def local(self, novo_local:str):
         if (novo_local.__class__ != str):
-            raise Exception("Tipo de local inválido")
+            raise ExceptionGeral("Tipo de local inválido")
         self.__local = novo_local
     
     @distancia.setter
     def distancia(self, nova_distancia:float):
         if (nova_distancia.__class__ != float):
-            raise Exception("Tipo de quantidade inválido")
+            raise ExceptionGeral("Tipo de quantidade inválido")
         if (nova_distancia < 0 ):
-            raise Exception("Valor da distância é negativo")
+            raise ExceptionGeral("Valor da distância é negativo")
         self.__distancia = nova_distancia
     @tempo_limite.setter
     def tempo_limite(self, novo_tempo:int):
         if (novo_tempo.__class__ != int):
-            raise Exception("Tipo de quantidade inválido")
+            raise ExceptionGeral("Tipo de quantidade inválido")
         if (novo_tempo < 0):
-            raise Exception("Valor do tempo é negativo")
+            raise ExceptionGeral("Valor do tempo é negativo")
         self.__tempo_limite= novo_tempo
         
     def __str__(self):
@@ -58,16 +59,17 @@ class MissaoExploracao(Missao):
         print(f"Tempo limite: {self.tempo_limite} horas")
     def concluir_missao(self, valores:list):
         if(valores.__class__ != list):
-            raise Exception("Os valores dessa missão tem que vir como uma lista") 
+            raise ExceptionGeral("Os valores dessa missão tem que vir como uma lista") 
         distancia = valores[0]
         tempo = valores[1]
 
         if (distancia.__class__ != float):
-            raise Exception("Distancia tem que ser um float")
+            raise ExceptionGeral("Distancia tem que ser um float")
         if (tempo.__class__ != int):
-            raise Exception("Tempo tem que ser um inteiro")
+            raise ExceptionGeral("Tempo tem que ser um inteiro")
         if (distancia >= self.__distancia and tempo <= self.__tempo_limite):
-            super().concluir_missao()
+            super()._concluir_missao()
             return True
         else:
+            super()._fracasso_missao()
             return False
