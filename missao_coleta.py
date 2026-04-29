@@ -1,7 +1,7 @@
 from missao import Missao
 class MissaoColeta(Missao):
     def __init__(self, nome:str, descricao:str, recompensa:int, item:str, quantidade:int):
-        self.item = item;
+        self.item = item
         self.quantidade = quantidade
         super().__init__(nome, descricao, recompensa)
     @property

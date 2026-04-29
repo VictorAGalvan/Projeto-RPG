@@ -1,3 +1,4 @@
+from item import Item
 class Personagem:
     def __init__(self, nome:str):
         self.nome = nome
@@ -5,7 +6,15 @@ class Personagem:
         self.__xp = 0
         self.__vida = 100
         self.__missoes = []
+        self.__ataque = 1
+        self.__inventario = []
 
+    @property
+    def inventario(self):
+        return self.__inventario
+    @property
+    def ataque(self):
+        return self.__ataque
     @property
     def nome(self) -> str:
         return self.__nome
@@ -21,6 +30,7 @@ class Personagem:
     @property
     def missao(self):
         return self.__missao
+    
     @nome.setter
     def nome (self, novo_nome:str):
         if  novo_nome.__class__ != str :
@@ -29,7 +39,9 @@ class Personagem:
         if (novo_nome == ""):
             raise Exception("Nome do Personagem Inválido")
         self.__nome = novo_nome
-    
+    def add_item(self, item:Item):
+        self.__inventario.append(item)
+
     def add_missao(self, nova_missao):
         for m in self.__missoes:
             if(m == nova_missao):
