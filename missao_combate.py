@@ -1,4 +1,5 @@
 from missao import Missao
+from exception_geral import ExceptionGeral
 class MissaoCombate(Missao):
     def __init__(self, nome:str, descricao:str, recompensa:int, tipo_inimigo:str, inimigos_a_derrotar:int):
         self.tipo_inimigo = tipo_inimigo
@@ -13,12 +14,12 @@ class MissaoCombate(Missao):
     @tipo_inimigo.setter
     def tipo_inimigo(self,tipo_inimigo:str):
         if (tipo_inimigo.__class__ != str):
-            raise Exception("Tipo de inimigo inválido")
+            raise ExceptionGeral("Tipo de inimigo inválido")
         self.__tipo_inimigo = tipo_inimigo  
     @inimigos_a_derrotar.setter
     def inimigos_a_derrotar(self,inimigos_a_derrotar:int):
         if (inimigos_a_derrotar.__class__ != int):
-            raise Exception("Tipo de inimigo inválido")
+            raise ExceptionGeral("Tipo de inimigo inválido")
         self.__inimigos_a_derrotar = inimigos_a_derrotar 
     def __str__(self):
         tamanho = len(self.nome)
@@ -39,9 +40,10 @@ class MissaoCombate(Missao):
 
     def concluir_missao(self, inimigos:int):
         if (inimigos.__class__ != int):
-            raise Exception("Inimigos tem que ser um inteiro")
+            raise ExceptionGeral("Inimigos tem que ser um inteiro")
         if (inimigos >= self.__inimigos_a_derrotar):
-            super().concluir_missao()
+            super()._concluir_missao()
             return True
         else:
+            super()._fracasso_missao()
             return False
