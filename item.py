@@ -27,6 +27,7 @@ def descricao(self,descricao:str):
 @atributo.setter
 def atriibuto(self,atributo:int):
     self.__atributo = atributo
+    
 @tipo.setter
 def tipo(self,tipo:str):
     if not tipo in tipoItem:
