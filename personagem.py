@@ -1,6 +1,7 @@
 from item import Item
 from missao import Missao
 from fim_de_jogo import FimDeJogo
+from tipo_item import tipoItem
 class Personagem:
     def __init__(self, nome:str):
         self.nome = nome
@@ -41,9 +42,14 @@ class Personagem:
         if (novo_nome == ""):
             raise Exception("Nome do Personagem Inválido")
         self.__nome = novo_nome
+        
     def add_item(self, item:Item):
         self.__inventario.append(item)
-    
+        if(item.tipo == tipoItem.ATAQUE.value):
+            self.__ataque += item.atributo
+        else:
+            self.__vida += item.atributo
+
     def add_xp(self,valor:int):
         self.__xp += valor        
         while self.__xp >=100:
