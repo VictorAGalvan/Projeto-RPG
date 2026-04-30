@@ -1,6 +1,6 @@
 from enum import Enum
 
-class tipoItem(Enum):
+class status_missao(Enum):
     ARMA = "ARMA"
     VESTIMENTA = "VESTIMENTA"
     UTILITARIO = "UTILITARIO"
