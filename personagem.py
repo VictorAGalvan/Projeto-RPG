@@ -1,22 +1,15 @@
-<<<<<<< HEAD
 from item import Item
-=======
 from missao import Missao
 from fim_de_jogo import FimDeJogo
->>>>>>> 0a3684e65ad003dff624fb8eed90ba6190e4ff27
 class Personagem:
     def __init__(self, nome:str):
         self.nome = nome
         self.__nivel = 1
         self.__xp = 0
         self.__vida = 100
-<<<<<<< HEAD
-        self.__missoes = []
         self.__ataque = 1
         self.__inventario = []
-=======
         self.__missoes:list[Missao] = []
->>>>>>> 0a3684e65ad003dff624fb8eed90ba6190e4ff27
 
     @property
     def inventario(self):
@@ -48,10 +41,6 @@ class Personagem:
         if (novo_nome == ""):
             raise Exception("Nome do Personagem Inválido")
         self.__nome = novo_nome
-<<<<<<< HEAD
-    def add_item(self, item:Item):
-        self.__inventario.append(item)
-=======
     
     def add_xp(self,valor:int):
         self.__xp += valor        
@@ -59,7 +48,6 @@ class Personagem:
             self.__xp -=100
             self.__nivel +=1
 
->>>>>>> 0a3684e65ad003dff624fb8eed90ba6190e4ff27
 
     def add_missao(self, nova_missao):
         for m in self.__missoes:
