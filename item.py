@@ -1,4 +1,5 @@
-from tipo_item import Tipo
+from exception_geral import ExceptionGeral
+from tipo_item import tipoItem
 class Item():
     def __init__(self,nome:str, descricao:str,  atributo:int, tipo:str):
         self.nome = nome 
@@ -25,9 +26,10 @@ def descricao(self,descricao:str):
     self.__descricao = descricao
 @atributo.setter
 def atriibuto(self,atributo:int):
-    self.__descricao = descricao
+    self.__atributo = atributo
+    
 @tipo.setter
 def tipo(self,tipo:str):
-    if not tipo in Tipo:
-        raise Exception()
+    if not tipo in tipoItem:
+        raise ExceptionGeral("Tipo não compativel")
     self.__tipo = tipo
