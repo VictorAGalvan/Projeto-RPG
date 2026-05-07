@@ -47,3 +47,5 @@ class MissaoCombate(Missao):
         else:
             super()._fracasso_missao()
             return False
+    def engine(self,personagem, valor = 0):
+        pass

@@ -47,4 +47,3 @@ class MissaoColeta(Missao):
         else:
             super()._fracasso_missao()
             return False
-    

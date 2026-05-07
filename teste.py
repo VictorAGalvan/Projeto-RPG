@@ -1,100 +1,141 @@
-from missao import Missao
-from missao_coleta import MissaoColeta
-from missao_exploracao import MissaoExploracao
-from missao_combate import MissaoCombate
+import time
 from personagem import Personagem
-from status import status_missao
-from fim_de_jogo import FimDeJogo
+from item import Item
+from missao_coleta import MissaoColeta
+from missao_combate import MissaoCombate
+from missao_exploracao import MissaoExploracao
 from exception_geral import ExceptionGeral
-p = Personagem("Arthur")
+from fim_de_jogo import FimDeJogo
+from tipo_item import Tipo
 
-print("========== TESTES DE SUCESSO ==========")
 
-print("\n--- SUCESSO: Coleta ---")
+print("=" * 50)
+print(" INICIALIZANDO RPG SEQUENCIAL ".center(50, "="))
+print("=" * 50)
+
 try:
-    try:
-        coleta = MissaoColeta("Coletar", "Coletar moedas", 20, "moeda de ouro", 5)
-        p.add_missao(coleta)
-        
-        p.concluir_missao(coleta, 8)  # suficiente
+   
+    nome_usuario = input("Digite o nome do seu Personagem: ")
+    jogador = Personagem(nome_usuario)
+    print(f"\nBem-vindo, {jogador.nome}!")
 
-        coleta.exibir_dados()
-    except ExceptionGeral as e:
-        print(f"Erro: {e}")
+    
+    espada = Item("Espada de Ferro", "Uma lâmina afiada", 10, Tipo.ARMA.value)
+    machado = Item("Machado de Guerra", "Lento mas poderoso", 20, Tipo.ARMA.value)
+    armadura = Item("Armadura de Couro", "Proteção básica", 15, Tipo.VESTIMENTA.value)
+    placas = Item("Armadura de Placas", "Proteção pesada", 30, Tipo.VESTIMENTA.value)
+    escudo = Item("Escudo", "Defesa extra", 5, Tipo.UTILITARIO.value)
+    anel = Item("Anel de Vida", "Aumenta vitalidade", 10, Tipo.UTILITARIO.value)
+
+    jogador.add_item(espada)
+    jogador.add_item(machado)
+    jogador.add_item(armadura)
+    jogador.add_item(placas)
+    jogador.add_item(escudo)
+    jogador.add_item(anel)
+
+    
+    print("\n" + "--- SEU INVENTÁRIO ---")
+    jogador.mostrar_inventario()
+
+    print("\n[!] Escolha os itens para equipar pelo número:")
+    
+    inventario = jogador.inventario
+    idx_arma = int(input("Número da ARMA: "))
+    idx_vest = int(input("Número da VESTIMENTA: "))
+    idx_util = int(input("Número do UTILITÁRIO: "))
+    jogador.equiparItems(inventario[idx_arma],inventario[idx_vest], inventario[idx_util])
+    print("\n[!] Itens iniciais adicionados ao seu inventário.")
+    jogador.mostrar_inventario()
+
+    
+    print("\n--- EQUIPANDO EQUIPAMENTOS ---")
+    jogador
+    jogador.equiparItems(espada, armadura, escudo)
+    jogador.atualizarAtributos() 
+    print("Atributos atualizados com sucesso!")
+    jogador.exibir_dados()
+
+    
+    print("\n" + "="*10 + " INICIANDO JORNADA DE MISSÕES " + "="*10)
+
+   
+    missao1 = MissaoColeta("Ervas do Pântano", "Colete plantas raras", 20, "Planta Verde", 5)
+    print(f"\nNova Missão: {missao1.nome}")
+    jogador.add_missao(missao1) 
+    
+    qtd_coletada = int(input(f"Quantas '{missao1.item}' você conseguiu coletar? "))
+   
+    jogador.concluir_missao(missao1, qtd_coletada)
+
+    print("\n=== PREPARAÇÃO PARA MISSÃO ===")
+
+    jogador.mostrar_inventario()
+
+    inventario = jogador.inventario
+
+    print("\nEscolha os equipamentos:")
+
+    idx_arma = int(input("Número da ARMA: "))
+    idx_vest = int(input("Número da VESTIMENTA: "))
+    idx_util = int(input("Número do UTILITÁRIO: "))
+
+    jogador.equiparItems(
+        inventario[idx_arma],
+        inventario[idx_vest],
+        inventario[idx_util]
+    )
+
+    print("\nSTATUS ATUAL")
+    print(f"Ataque: {jogador.ataque}")
+    print(f"Vida: {jogador.vida}")
+    missao2 = MissaoExploracao("Mapear Deserto", "Explore as dunas", 30, "Deserto de Sal", 50.0, 10)
+    print(f"\nNova Missão: {missao2.nome}")
+    jogador.add_missao(missao2)
+
+    dist = float(input(f"Qual a distância percorrida em {missao2.local} (km)? "))
+    tempo = int(input("Em quanto tempo (horas)? "))
+    jogador.concluir_missao(missao2, [dist, tempo])
+
+    print("\n=== PREPARAÇÃO PARA MISSÃO ===")
+
+    jogador.mostrar_inventario()
+
+    inventario = jogador.inventario
+
+    print("\nEscolha os equipamentos:")
+
+    idx_arma = int(input("Número da ARMA: "))
+    idx_vest = int(input("Número da VESTIMENTA: "))
+    idx_util = int(input("Número do UTILITÁRIO: "))
+
+    jogador.equiparItems(
+        inventario[idx_arma],
+        inventario[idx_vest],
+        inventario[idx_util]
+    )
+
+    print("\nSTATUS ATUAL")
+    print(f"Ataque: {jogador.ataque}")
+    print(f"Vida: {jogador.vida}")
+    missao3 = MissaoCombate("Cacada de Orcs", "Limpe o acampamento", 40, "Orc", 3)
+    print(f"\nNova Missão: {missao3.nome}")
+    jogador.add_missao(missao3)
+
+    inimigos = int(input(f"Quantos {missao3.tipo_inimigo}s você derrotou? "))
+    jogador.concluir_missao(missao3, inimigos)
 
 
-    print("\n--- SUCESSO: Exploracao ---")
-    try:
-        exploracao = MissaoExploracao("Explorar", "Explorar um vale", 30, "Vale", 25.5, 10)
+    print("\n" + "=" * 50)
+    print(" RESUMO DA AVENTURA ".center(50, "="))
+    jogador.exibir_dados()
 
-        p.add_missao(exploracao)
+except ExceptionGeral as e:
+    print(f"\n[ERRO DE LÓGICA]: {e}")
+except FimDeJogo:
+    print("\n" + "!" * 50)
+    print(" GAME OVER!".center(50, "!"))
+    print("!" * 50)
+except Exception as e:
+    print(f"\n[ERRO INESPERADO]: {e}")
 
-        # supondo: [distancia, tempo]
-        p.concluir_missao(exploracao, [30.0, 8])  # suficiente
-
-        exploracao.exibir_dados()
-    except ExceptionGeral as e:
-        print(f"Erro: {e}")
-
-
-    print("\n--- SUCESSO: Combate ---")
-    try:
-        combate = MissaoCombate("Matar o dragao", "Matar o dragao de gelo", 50, "Dragão de gelo", 1)
-
-        p.add_missao(combate)
-        p.concluir_missao(combate, 1)  # suficiente
-
-        combate.exibir_dados()
-    except ExceptionGeral as e:
-        print(f"Erro: {e}")
-    p.exibir_dados()
-
-    print("\n========== TESTES DE FALHA ==========")
-
-
-    print("\n--- FALHA: Coleta ---")
-    try:
-        coleta_fail = MissaoColeta("Coletar ervas", "Coletar ervas raras", 15, "erva rara", 10)
-
-        p.add_missao(coleta_fail)
-        p.concluir_missao(coleta_fail, 3)  # insuficiente
-
-        coleta_fail.exibir_dados()
-    except ExceptionGeral as e:
-        print(f"Erro: {e}")
-
-
-    print("\n--- FALHA: Exploracao ---")
-    try:
-        exploracao_fail = MissaoExploracao("Explorar caverna", "Explorar caverna profunda", 20, "Caverna", 50.0, 5)
-
-        p.add_missao(exploracao_fail)
-
-        # distância insuficiente
-        p.concluir_missao(exploracao_fail, [30.0, 6])
-
-        exploracao_fail.exibir_dados()
-    except ExceptionGeral as e:
-        print(f"Erro: {e}")
-
-
-
-    print("\n--- FALHA: Combate ---")
-    try:
-        combate_fail = MissaoCombate("Cacar lobos", "Cacar lobos selvagens", 25, "Lobo selvagem", 5)
-
-        p.add_missao(combate_fail)
-        p.concluir_missao(combate_fail, 2)  # insuficiente
-
-        combate_fail.exibir_dados()
-    except ExceptionGeral as e:
-        print(f"Erro: {e}")
-
-
-    # =========================
-    # DADOS FINAIS
-    # =========================
-    print("\n========== RESULTADO FINAL ==========")
-    p.exibir_dados()
-except FimDeJogo as e:
-    print(f"{e}")
