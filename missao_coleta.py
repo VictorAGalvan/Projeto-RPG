@@ -24,7 +24,7 @@ class MissaoColeta(Missao):
         
     def __str__(self):
         text = super().__str__()
-        return f"{text} \nItem: {self.item} \nQuantidade: {self.quantidade}"
+        return f"{text} - Item: {self.item} - Quantidade: {self.quantidade}"
 
     def __eq__(self, v):
         if (super().__eq__(v) and 

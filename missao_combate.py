@@ -24,7 +24,7 @@ class MissaoCombate(Missao):
     def __str__(self):
         tamanho = len(self.nome)
         text = super().__str__()  
-        return f"{text} \nTipo de inimigo: {self.tipo_inimigo} \nInimigos a derrotar: {self.inimigos_a_derrotar}"
+        return f"{text} - Tipo de inimigo: {self.tipo_inimigo} - Inimigos a derrotar: {self.inimigos_a_derrotar}"
     
 
     def __eq__(self, v):

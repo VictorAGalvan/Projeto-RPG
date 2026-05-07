@@ -41,7 +41,7 @@ class MissaoExploracao(Missao):
         
     def __str__(self):
         text = super().__str__()
-        return f"{text} \nLocal: {self.local} \nDistância: {self.distancia} km \nTempo limite: {self.tempo_limite} horas"
+        return f"{text} - Local: {self.local} - Distância: {self.distancia} km - Tempo limite: {self.tempo_limite} horas"
     
     def __eq__(self, v):
         if (super().__eq__(v) and 

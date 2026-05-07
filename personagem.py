@@ -8,13 +8,11 @@ class Personagem:
         self.nome = nome
         self.__nivel = 1
         self.__xp = 0
-        self.__vidaBase = 100
-        self.__vidaMaxima = 100
-        self.__vida = self.__vidaMaxima
+        self.__vida = 100
         self.__buffVida = 0
         self.__buffAtaque = 0
-        self.__ataque = 1
-        self.__ataqueBase = 1
+        self.__ataque = 10
+        self.__ataqueBase = 10
         self.__utilitarioEquipado = None
         self.__armaEquipada = None
         self.__vestimentaEquipada = None
@@ -22,9 +20,6 @@ class Personagem:
         self.__missoes:list[Missao] = []
         self.atualizarAtributos()
 
-    @property
-    def vidaMaxima(self):
-        return self.__vidaMaxima
     @property
     def buffVida(self):
         return self.__buffVida
@@ -62,7 +57,7 @@ class Personagem:
     def vida(self):
         return self.__vida
     @property
-    def missao(self):
+    def missoes(self):
         return self.__missoes
     
     @nome.setter
@@ -84,16 +79,20 @@ class Personagem:
         self.__armaEquipada = None
         self.__utilitarioEquipado = None
         self.__vestimentaEquipada = None      
+        self.__vida -= self.__buffVida
+        self.__ataque = self.__ataqueBase
         self.__buffVida=0
         self.__buffAtaque = 0
+        if(self.__vida <= 0):
+            raise FimDeJogo("Fim de Jogo")
         self.atualizarAtributos()
     def atualizarAtributos(self):
-
+        buffA =0 
         # ATAQUE
-        ataque_total = self.__ataqueBase
-
+        ataque_total = self.__ataque
+        
         if self.__armaEquipada:
-            ataque_total += self.__armaEquipada.atributo
+            buffA += self.__armaEquipada.atributo
 
         # VIDA
         bonus_percentual = 0
@@ -104,14 +103,19 @@ class Personagem:
         if self.__utilitarioEquipado:
             bonus_percentual += self.__utilitarioEquipado.atributo
 
-        bonus_vida = self.__vidaBase * (bonus_percentual / 100)
+        bonus_vida = self.__vida * (bonus_percentual / 100)
 
-        vida_total = self.__vida + bonus_vida
+        
 
+        vida_total = self.vida + bonus_vida
         # LIMITE MÁXIMO
         if vida_total > 100:
+            excedente = vida_total - 100
+            bonus_vida -= excedente
             vida_total = 100
-
+        
+        self.__buffAtaque = buffA
+        self.__buffVida = bonus_vida
         self.__ataque = int(ataque_total)
         self.__vida = int(vida_total)
     def equiparItems(self,arma:Item,vestimenta:Item,utilitario:Item):
@@ -170,6 +174,17 @@ class Personagem:
                 print(m)
         else:
             print("Não tem missões")
+    def exibir_missoes(self):
+        cont =0
+        if self.__missoes == None:
+            print("Sem missões")
+            print("-"*50)
+        for m in self.__missoes:
+            print(f"[{cont}] - {m}")
+            cont +=1
+          
+        print("-"*50)
+        pass
     def __retirar_vida(self, valor:int):
         if(valor.__class__ != int):
             raise ExceptionGeral("Valor para retirar a vida é diferente de inteiro")
