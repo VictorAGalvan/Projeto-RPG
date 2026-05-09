@@ -116,16 +116,25 @@ class Personagem:
         
         self.__buffAtaque = buffA
         self.__buffVida = bonus_vida
-        self.__ataque = int(ataque_total)
+        self.__ataque = int(ataque_total + buffA)
         self.__vida = int(vida_total)
     def equiparItems(self,arma:Item,vestimenta:Item,utilitario:Item):
-        if arma not in self.__inventario:
+        vazio_a= Item("Nenhum", "none", 0,Tipo.ARMA.value )
+        vazio_v = Item("Nenhum", "none", 0,Tipo.VESTIMENTA.value )
+        vazio_u =  Item("Nenhum", "none", 0,Tipo.UTILITARIO.value )
+        if (arma is None):
+            arma = vazio_a
+        if (vestimenta is None):
+            vestimenta = vazio_v
+        if (utilitario is None):
+            utilitario = vazio_u
+        if arma not in self.__inventario and arma != vazio_a:
             raise ExceptionGeral("Arma não está no inventário")
-        if vestimenta not in self.__inventario:
+        if vestimenta not in self.__inventario and vestimenta != vazio_v:
             raise ExceptionGeral("Vestimenta não está no inventário")
-        if utilitario not in self.__inventario:
+        if utilitario not in self.__inventario and utilitario !=vazio_u:
             raise ExceptionGeral("Utilitário não está no inventário")
-        
+
         if(arma.tipo != Tipo.ARMA.value ):
             raise ExceptionGeral("Tipo de item inválido para equipar a arma")
         if(vestimenta.tipo != Tipo.VESTIMENTA.value):
@@ -157,8 +166,8 @@ class Personagem:
         nova_missao.iniciar_missao() 
         self.__missoes.append(nova_missao)
     def __str__(self):
-        tamanho = len(self.nome)
-        text = tamanho* "-" + "\nNome: " + self.__nome + "\nNivel: " + str(self.__nivel) + "\nXP: " + str(self.__xp) + "\nVida: " + str(self.__vida) + "\n" + tamanho * "-" + "\n"
+        tamanho = 50
+        text =  "-"*tamanho + "\nNome: " + self.__nome + "\nNivel: " + str(self.__nivel) + "\nXP: " + str(self.__xp) + "\nVida: " + str(self.__vida)  + "\nAtaque: " + str(self.__ataque) +"\n"+ "-"*tamanho  + "\n"
         return text
     def __eq__(self, v):
         if self.__nome == v.nome and self.__nivel == v.nivel and self.__xp == v.xp and self.__vida == v.vida:
@@ -166,7 +175,7 @@ class Personagem:
     
         return False
     def exibir_dados(self): 
-        tamanho = len(self.nome)
+        tamanho = 50
         texto = tamanho* "-" + "\nNome: " + self.__nome + "\nNivel: " + str(self.__nivel) + "\nXP: " + str(self.__xp) + "\nVida: " + str(self.__vida) + "\n" + tamanho * "-" + "\n"
         print(texto)
         if (len(self.__missoes) > 0 ):

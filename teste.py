@@ -25,13 +25,15 @@ try:
         print(f"0 - Sair")
         print(f"1 - Digitar missão")
         print(f"2 - Digitar item")
-        print(f"3 - Adicionar missão no personagem: ")
+        print(f"3 - Adicionar missão no personagem")
         print(f"4 - Concluir missão")
         print(f"5 - Ver Inventário")
         print(f"6 - Ver personagem")
         print(f"7 - DEBUG")
-        opc = int(input("Digite a opção"))
+        opc = int(input("Digite a opção: "))
         match opc:
+            case 0: 
+                break
             case 1:
                 print("Tipo de missões: ")
                 print("1 - Missao Coleta")
@@ -74,28 +76,29 @@ try:
                     cont += 1
                 idx = int(input("Digite qual missão quer adicionar no personagem: "))
                 jogador.add_missao(missoes[idx])
+                missoes.pop(idx)
             case 4:
                 print("\n" + "--- SEU INVENTÁRIO ---")
                 jogador.mostrar_inventario()
                 print("Deseja equipar algo? 0 para não e 1 para sim")
                 opc2 = int(input("Digite:"))
                 if(opc2 == 1):
-                    print("\n[!] Escolha os itens para equipar pelo número:")
+                    print("\n[!] Escolha os itens para equipar pelo número -1 não equipa nada: ")
                     
                     inventario = jogador.inventario
                     idx_arma = int(input("Número da ARMA: "))
                     idx_vest = int(input("Número da VESTIMENTA: "))
                     idx_util = int(input("Número do UTILITÁRIO: "))
                     if idx_arma == -1:
-                        arma = Item("Nenhum", "none", Tipo.ARMA.value )
+                        arma = Item("Nenhum", "none", 0,Tipo.ARMA.value )
                     else:
                         arma = inventario[idx_arma]
                     if idx_vest == -1:
-                        vest = Item("Nenhum", "none", Tipo.VESTIMENTA.value )
+                        vest = Item("Nenhum", "none", 0,Tipo.VESTIMENTA.value )
                     else:
                         vest = inventario[idx_vest]
                     if idx_util == -1:
-                        util =  Item("Nenhum", "none", Tipo.UTILITARIO.value )
+                        util =  Item("Nenhum", "none", 0,Tipo.UTILITARIO.value )
                     else:
                         util = inventario[idx_util]
                     
@@ -110,7 +113,7 @@ try:
                 missao = jogador.missoes[opc2]
                 if(missao.__class__ == MissaoColeta):
                     qtd_coletada = int(input(f"Quantas '{jogador.missoes[opc2].item}' você conseguiu coletar? "))
-                    jogador.concluir_missao(jogador.missoes()[opc2], qtd_coletada)
+                    jogador.concluir_missao(jogador.missoes[opc2], qtd_coletada)
                 elif missao.__class__ == MissaoCombate:
                     inimigos = int(input(f"Quantos {missao.tipo_inimigo}s você derrotou? "))
                     jogador.concluir_missao(missao, inimigos)
@@ -231,7 +234,8 @@ try:
                 print("\n" + "=" * 50)
                 print(" RESUMO DA AVENTURA ".center(50, "="))
                 jogador.exibir_dados()
-
+            case _:
+                print ("Opção inválida!")
 except ExceptionGeral as e:
     print(f"\n[ERRO DE LÓGICA]: {e}")
 except FimDeJogo:

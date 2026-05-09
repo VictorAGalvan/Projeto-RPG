@@ -35,3 +35,7 @@ class Item():
         self.__tipo = tipo
     def __str__(self):
         return f"{self.nome} ({self.tipo}) - {self.atributo}"
+    def __eq__(self,v):
+        if(self.nome == v.nome and self.descricao == v.descricao and self.atributo == v.atributo):
+            return True
+        return False

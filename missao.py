@@ -72,8 +72,8 @@ class Missao(ABC):
         print(f"Recompensa: {str(self.__recompensa)}")
         print(f"Status: {self.__status}")
     def __str__(self):
-        tamanho = len(self.__nome)
-        text = tamanho * "-" + "\nNome missão: " + self.__nome + "\nDescrição: " + self.__descricao + "\nRecompensa: " + str(self.__recompensa) +  "\nStatus: " + self.__status + "\n" + tamanho * "-" + "\n"
+        tamanho = 50
+        text =  "-"*tamanho  + "\nNome missão: " + self.__nome + "\nDescrição: " + self.__descricao + "\nRecompensa: " + str(self.__recompensa) +  "\nStatus: " + self.__status + "\n" + "-" *tamanho + "\n"
         
         return text
 

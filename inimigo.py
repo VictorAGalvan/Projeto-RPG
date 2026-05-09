@@ -13,6 +13,6 @@ class Inimigo():
     def vida(self,nova_vida):
         self.__vida = nova_vida
     @ataque.setter
-    def vida(self,ataque):
+    def ataque(self,ataque):
         self.__ataque = ataque   
     
