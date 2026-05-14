@@ -1,3 +1,5 @@
+from engine import Engine
+from inimigo import Inimigo
 from personagem import Personagem
 from item import Item
 from missao import Missao
@@ -55,9 +57,12 @@ try:
                         tempo = int(input("Digite o tempo limite em horas: "))
                         missoes.append(MissaoExploracao(nome,desc,recompensa,local,distancia,tempo))
                     case 3: 
-                        inimigo = input("Digite o inimigo: ")
+                        inimigo = input("Digite o nome do inimigo: ")
+                        vida = int(input("Digite a quantidade de vida: "))
+                        ataque = int(input("Digite a quantidade de ataque: "))
                         quantidade = int(input("Digite a quantidade de inimigos: "))
-                        missoes.append(MissaoCombate(nome,desc,recompensa,inimigo,quantidade))
+                        i = Inimigo(inimigo,vida,ataque)
+                        missoes.append(MissaoCombate(nome,desc,recompensa,i,quantidade))
                     case _:
                         print("Error opção inválida")
 
@@ -112,15 +117,22 @@ try:
                 opc2 = int(input("Digite qual missão deseja concluir: "))
                 missao = jogador.missoes[opc2]
                 if(missao.__class__ == MissaoColeta):
-                    qtd_coletada = int(input(f"Quantas '{jogador.missoes[opc2].item}' você conseguiu coletar? "))
-                    jogador.concluir_missao(jogador.missoes[opc2], qtd_coletada)
+                    #qtd_coletada = int(input(f"Quantas '{jogador.missoes[opc2].item}' você conseguiu coletar? "))
+                   # jogador.concluir_missao(jogador.missoes[opc2], qtd_coletada)
+                    e = Engine(missao,jogador)
+                    jogador.concluir_missao(e)
                 elif missao.__class__ == MissaoCombate:
-                    inimigos = int(input(f"Quantos {missao.tipo_inimigo}s você derrotou? "))
-                    jogador.concluir_missao(missao, inimigos)
+                    #inimigos = int(input(f"Quantos {missao.tipo_inimigo}s você derrotou? "))
+                    e = Engine(missao,jogador)
+                    jogador.concluir_missao(e)
+                    #jogador.concluir_missao(missao, inimigos)
+                    
                 elif missao.__class__ == MissaoExploracao:
-                    dist = float(input(f"Qual a distância percorrida em {missao.local} (km)? "))
-                    tempo = int(input("Em quanto tempo (horas)? "))
-                    jogador.concluir_missao(missao, [dist, tempo])
+                    #dist = float(input(f"Qual a distância percorrida em {missao.local} (km)? "))
+                    #tempo = int(input("Em quanto tempo (horas)? "))
+                    #jogador.concluir_missao(missao, [dist, tempo])
+                    e = Engine(missao,jogador)
+                    jogador.concluir_missao(e)
             case 5:
                 jogador.mostrar_inventario()
             case 6:

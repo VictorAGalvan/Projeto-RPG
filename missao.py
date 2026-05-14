@@ -79,7 +79,7 @@ class Missao(ABC):
 
 
     def __eq__(self, v):
-        if self.__nome == v.nome and self.__descricao == v.descricao and self.__recompensa == v.recompensa and self.__status == v.status:
+        if self.__nome == v.nome and self.__descricao == v.descricao and self.__recompensa == v.recompensa:
             return True
         
         return False

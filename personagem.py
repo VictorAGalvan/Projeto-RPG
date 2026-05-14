@@ -1,3 +1,4 @@
+#from engine import Engine
 from exception_geral import ExceptionGeral
 from item import Item
 from missao import Missao
@@ -12,6 +13,8 @@ class Personagem:
         self.__buffVida = 0
         self.__buffAtaque = 0
         self.__ataque = 10
+        self.__velocidade  = 5   
+        self.__buffVelocidade = 0
         self.__ataqueBase = 10
         self.__utilitarioEquipado = None
         self.__armaEquipada = None
@@ -59,7 +62,18 @@ class Personagem:
     @property
     def missoes(self):
         return self.__missoes
-    
+    @property
+    def buffVelocidade(self):
+        return self.__buffVelocidade
+    @property
+    def velocidade(self):
+        return self.__velocidade
+    @vida.setter
+    def vida(self,value):
+        if value <= 0:
+            self.__vida = 0
+            raise FimDeJogo("O personagem morreu!")
+        self.__vida = value
     @nome.setter
     def nome (self, novo_nome:str):
         if  novo_nome.__class__ != str :
@@ -113,9 +127,14 @@ class Personagem:
             excedente = vida_total - 100
             bonus_vida -= excedente
             vida_total = 100
-        
+
+        buffV = 0
+        if self.__utilitarioEquipado:
+            buffV += self.__utilitarioEquipado.atributo / 10
+ 
         self.__buffAtaque = buffA
         self.__buffVida = bonus_vida
+        self.__buffVelocidade = buffV
         self.__ataque = int(ataque_total + buffA)
         self.__vida = int(vida_total)
     def equiparItems(self,arma:Item,vestimenta:Item,utilitario:Item):
@@ -142,6 +161,7 @@ class Personagem:
         if(utilitario.tipo != Tipo.UTILITARIO.value):
             raise ExceptionGeral("Tipo de item inválido para equipar o utilitario")
         self.__armaEquipada = arma
+        
         self.__vestimentaEquipada = vestimenta
         self.__utilitarioEquipado = utilitario
         self.atualizarAtributos()
@@ -167,7 +187,7 @@ class Personagem:
         self.__missoes.append(nova_missao)
     def __str__(self):
         tamanho = 50
-        text =  "-"*tamanho + "\nNome: " + self.__nome + "\nNivel: " + str(self.__nivel) + "\nXP: " + str(self.__xp) + "\nVida: " + str(self.__vida)  + "\nAtaque: " + str(self.__ataque) +"\n"+ "-"*tamanho  + "\n"
+        text =  "-"*tamanho + "\nNome: " + self.__nome + "\nNivel: " + str(self.__nivel) + "\nXP: " + str(self.__xp) + "\nVida: " + str(self.__vida)  + "\nAtaque: " + str(self.__ataque) +"\nVelocidade: " + str(self.__velocidade) + "\n" + "-"*tamanho  + "\n"
         return text
     def __eq__(self, v):
         if self.__nome == v.nome and self.__nivel == v.nivel and self.__xp == v.xp and self.__vida == v.vida:
@@ -176,7 +196,7 @@ class Personagem:
         return False
     def exibir_dados(self): 
         tamanho = 50
-        texto = tamanho* "-" + "\nNome: " + self.__nome + "\nNivel: " + str(self.__nivel) + "\nXP: " + str(self.__xp) + "\nVida: " + str(self.__vida) + "\n" + tamanho * "-" + "\n"
+        texto =  "-"*tamanho + "\nNome: " + self.__nome + "\nNivel: " + str(self.__nivel) + "\nXP: " + str(self.__xp) + "\nVida: " + str(self.__vida)  + "\nAtaque: " + str(self.__ataque) +"\nVelocidade: " + str(self.__velocidade) + "\n" + "-"*tamanho  + "\n"
         print(texto)
         if (len(self.__missoes) > 0 ):
             for m in self.__missoes:
@@ -194,7 +214,7 @@ class Personagem:
           
         print("-"*50)
         pass
-    def __retirar_vida(self, valor:int):
+    def retirar_vida(self, valor:int):
         if(valor.__class__ != int):
             raise ExceptionGeral("Valor para retirar a vida é diferente de inteiro")
         if(valor <= 0):
@@ -205,18 +225,23 @@ class Personagem:
             print ("Fim de Jogo!")
             self.exibir_dados()
             raise FimDeJogo("")
-    def concluir_missao(self, missao, valor):
-        sucesso= missao.concluir_missao(valor)
+    def concluir_missao(self, e):
+        #sucesso= missao.concluir_missao(valor)
+        missao = e.missao
+        sucesso = e.comecar()
         #print(sucesso)
         if sucesso:
+            missao._concluir_missao()
             print(f"Missão concluída com sucesso recebendo recompensa de: {missao.recompensa}")
             self.add_xp(missao.recompensa)
-            self.__retirar_vida(1)
+            #self.retirar_vida(1)
         else:
+            missao._fracasso_missao()
             self.__fracasso_missao()
             print(f"Missão não conseguiu ser concluida com sucesso!")
         self.desequiparItems()
     def __fracasso_missao(self):
-        vida = 50
+        vida = 10
         print(f"Missão fracassada. Irá perder {vida} pontos de vida!")
-        self.__retirar_vida(vida)
+        
+        self.retirar_vida(vida)

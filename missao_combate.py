@@ -1,7 +1,8 @@
+from inimigo import Inimigo
 from missao import Missao
 from exception_geral import ExceptionGeral
 class MissaoCombate(Missao):
-    def __init__(self, nome:str, descricao:str, recompensa:int, tipo_inimigo:str, inimigos_a_derrotar:int):
+    def __init__(self, nome:str, descricao:str, recompensa:int, tipo_inimigo:Inimigo, inimigos_a_derrotar:int):
         self.tipo_inimigo = tipo_inimigo
         self.inimigos_a_derrotar = inimigos_a_derrotar
         super().__init__(nome, descricao, recompensa)
@@ -12,8 +13,8 @@ class MissaoCombate(Missao):
     def inimigos_a_derrotar(self):
         return self.__inimigos_a_derrotar
     @tipo_inimigo.setter
-    def tipo_inimigo(self,tipo_inimigo:str):
-        if (tipo_inimigo.__class__ != str):
+    def tipo_inimigo(self,tipo_inimigo:Inimigo):
+        if (tipo_inimigo.__class__ != Inimigo):
             raise ExceptionGeral("Tipo de inimigo inválido")
         self.__tipo_inimigo = tipo_inimigo  
     @inimigos_a_derrotar.setter
