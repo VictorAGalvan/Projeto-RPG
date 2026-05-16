@@ -1,5 +1,5 @@
-from missao import Missao
-from exception_geral import ExceptionGeral
+from models.missao import Missao
+from exceptions.exception_geral import ExceptionGeral
 class MissaoExploracao(Missao):
     def __init__(self, nome:str, descricao:str, recompensa:int, local:str, distancia_em_km:float,tempo_limite:int):
         self.local = local

@@ -1,5 +1,5 @@
-from exception_geral import ExceptionGeral
-from tipo_item import Tipo
+from exceptions.exception_geral import ExceptionGeral
+from models.tipo_item import Tipo
 class Item():
     def __init__(self,nome:str, descricao:str,  atributo:int, tipo:str):
         self.nome = nome 

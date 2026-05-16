@@ -1,11 +1,11 @@
 import random
 
-from inimigo import Inimigo
-from missao import Missao
-from missao_coleta import MissaoColeta
-from missao_combate import MissaoCombate
-from missao_exploracao import MissaoExploracao
-from personagem import Personagem
+from models.inimigo import Inimigo
+from models.missao import Missao
+from models.missao_coleta import MissaoColeta
+from models.missao_combate import MissaoCombate
+from models.missao_exploracao import MissaoExploracao
+from models.personagem import Personagem
 
 #p= Personagem("victor")
 #m = MissaoCombate("matar goblin","matar",10,Inimigo("goblin",25,1),3)
@@ -98,9 +98,10 @@ class Engine():
                 if inimigo.vida <= 0:
                     print("Inimigo derrotado!")
                     break
-
+                if self.__personagem.vida <= 0:
+                    break
                 self.__personagem.retirar_vida(inimigo.ataque)
-
+                
                 print(f"Inimigo causou {inimigo.ataque} de dano")
                 print(f"Vida do personagem: {self.__personagem.vida}")
 
@@ -116,7 +117,7 @@ class Engine():
         print("-" * 50)
  
         quantidade_alvo = self.__missao.quantidade
-        item_nome       = self.__missao.item
+        item_nome     = self.__missao.item
         velocidade      = self.__personagem.velocidade
  
         coletados  = 0

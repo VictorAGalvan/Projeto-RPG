@@ -1,14 +1,18 @@
-from engine import Engine
-from inimigo import Inimigo
-from personagem import Personagem
-from item import Item
-from missao import Missao
-from missao_coleta import MissaoColeta
-from missao_combate import MissaoCombate
-from missao_exploracao import MissaoExploracao
-from exception_geral import ExceptionGeral
-from fim_de_jogo import FimDeJogo
-from tipo_item import Tipo
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
+from models.engine import Engine
+from models.inimigo import Inimigo
+from models.personagem import Personagem
+from models.item import Item
+from models.missao import Missao
+from models.missao_coleta import MissaoColeta
+from models.missao_combate import MissaoCombate
+from models.missao_exploracao import MissaoExploracao
+from exceptions.exception_geral import ExceptionGeral
+from exceptions.fim_de_jogo import FimDeJogo
+from models.tipo_item import Tipo
+from factory.FactoryMissao import *
 
 
 missoes:list[Missao] =[]
@@ -50,19 +54,19 @@ try:
                     case 1:
                         item_coleta = input("Digite o item a ser coletado: ")
                         quantidade = int(input("Quantidade de items: "))
-                        missoes.append(MissaoColeta(nome,desc,recompensa,item_coleta,quantidade))
+                        missoes.append(FactoryMissao.criar_missao("coleta",nome,desc,recompensa,item = item_coleta,quantidade = quantidade))
                     case 2:
                         local = input("Digite o local: ")
                         distancia = float(input("Digite a distancia: "))
                         tempo = int(input("Digite o tempo limite em horas: "))
-                        missoes.append(MissaoExploracao(nome,desc,recompensa,local,distancia,tempo))
+                        missoes.append(FactoryMissao.criar_missao("exploracao",nome,desc,recompensa,local = local,distancia = distancia,tempo_limite = tempo))
                     case 3: 
                         inimigo = input("Digite o nome do inimigo: ")
                         vida = int(input("Digite a quantidade de vida: "))
                         ataque = int(input("Digite a quantidade de ataque: "))
                         quantidade = int(input("Digite a quantidade de inimigos: "))
                         i = Inimigo(inimigo,vida,ataque)
-                        missoes.append(MissaoCombate(nome,desc,recompensa,i,quantidade))
+                        missoes.append(FactoryMissao.criar_missao("combate",nome,desc,recompensa,tipo_inimigo = i,quantidade = quantidade))
                     case _:
                         print("Error opção inválida")
 
@@ -116,23 +120,9 @@ try:
                 jogador.exibir_missoes()
                 opc2 = int(input("Digite qual missão deseja concluir: "))
                 missao = jogador.missoes[opc2]
-                if(missao.__class__ == MissaoColeta):
-                    #qtd_coletada = int(input(f"Quantas '{jogador.missoes[opc2].item}' você conseguiu coletar? "))
-                   # jogador.concluir_missao(jogador.missoes[opc2], qtd_coletada)
-                    e = Engine(missao,jogador)
-                    jogador.concluir_missao(e)
-                elif missao.__class__ == MissaoCombate:
-                    #inimigos = int(input(f"Quantos {missao.tipo_inimigo}s você derrotou? "))
-                    e = Engine(missao,jogador)
-                    jogador.concluir_missao(e)
-                    #jogador.concluir_missao(missao, inimigos)
-                    
-                elif missao.__class__ == MissaoExploracao:
-                    #dist = float(input(f"Qual a distância percorrida em {missao.local} (km)? "))
-                    #tempo = int(input("Em quanto tempo (horas)? "))
-                    #jogador.concluir_missao(missao, [dist, tempo])
-                    e = Engine(missao,jogador)
-                    jogador.concluir_missao(e)
+                print(jogador)
+                e = Engine(missao,jogador)
+                jogador.concluir_missao(e)
             case 5:
                 jogador.mostrar_inventario()
             case 6:
@@ -177,13 +167,12 @@ try:
                 print("\n" + "="*10 + " INICIANDO JORNADA DE MISSÕES " + "="*10)
 
             
-                missao1 = MissaoColeta("Ervas do Pântano", "Colete plantas raras", 20, "Planta Verde", 5)
+                missao1 = FactoryMissao.criar_missao("coleta","Ervas do Pântano", "Colete plantas raras", 20, item="Planta Verde", quantidade=5)
                 print(f"\nNova Missão: {missao1.nome}")
                 jogador.add_missao(missao1) 
-                
-                qtd_coletada = int(input(f"Quantas '{missao1.item}' você conseguiu coletar? "))
-            
-                jogador.concluir_missao(missao1, qtd_coletada)
+               
+                e = Engine(missao1,jogador)
+                jogador.concluir_missao(e)
 
                 print("\n=== PREPARAÇÃO PARA MISSÃO ===")
 
@@ -206,13 +195,14 @@ try:
                 print("\nSTATUS ATUAL")
                 print(f"Ataque: {jogador.ataque}")
                 print(f"Vida: {jogador.vida}")
-                missao2 = MissaoExploracao("Mapear Deserto", "Explore as dunas", 30, "Deserto de Sal", 50.0, 10)
+                missao2 = FactoryMissao.criar_missao("exploracao","Mapear Deserto", "Explore as dunas", 30, local = "Deserto de Sal", distancia = 50.0, tempo_limite = 10)
                 print(f"\nNova Missão: {missao2.nome}")
                 jogador.add_missao(missao2)
 
-                dist = float(input(f"Qual a distância percorrida em {missao2.local} (km)? "))
-                tempo = int(input("Em quanto tempo (horas)? "))
-                jogador.concluir_missao(missao2, [dist, tempo])
+                #dist = float(input(f"Qual a distância percorrida em {missao2.local} (km)? "))
+                #1tempo = int(input("Em quanto tempo (horas)? "))
+                e = Engine(missao2,jogador)
+                jogador.concluir_missao(e)
 
                 print("\n=== PREPARAÇÃO PARA MISSÃO ===")
 
@@ -225,7 +215,7 @@ try:
                 idx_arma = int(input("Número da ARMA: "))
                 idx_vest = int(input("Número da VESTIMENTA: "))
                 idx_util = int(input("Número do UTILITÁRIO: "))
-
+                
                 jogador.equiparItems(
                     inventario[idx_arma],
                     inventario[idx_vest],
@@ -235,12 +225,13 @@ try:
                 print("\nSTATUS ATUAL")
                 print(f"Ataque: {jogador.ataque}")
                 print(f"Vida: {jogador.vida}")
-                missao3 = MissaoCombate("Cacada de Orcs", "Limpe o acampamento", 40, "Orc", 3)
+                inimigo = Inimigo("Orc",50, 15)
+                missao3 = FactoryMissao.criar_missao("combate","Cacada de Orcs", "Limpe o acampamento", 40, tipo_inimigo = inimigo, quantidade = 3)
                 print(f"\nNova Missão: {missao3.nome}")
                 jogador.add_missao(missao3)
 
-                inimigos = int(input(f"Quantos {missao3.tipo_inimigo}s você derrotou? "))
-                jogador.concluir_missao(missao3, inimigos)
+                e = Engine(missao3,jogador)
+                jogador.concluir_missao(e)
 
 
                 print("\n" + "=" * 50)

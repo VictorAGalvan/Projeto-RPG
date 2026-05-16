@@ -1,9 +1,9 @@
 #from engine import Engine
-from exception_geral import ExceptionGeral
-from item import Item
-from missao import Missao
-from fim_de_jogo import FimDeJogo
-from tipo_item import Tipo
+from exceptions.exception_geral import ExceptionGeral
+from models.item import Item
+from models.missao import Missao
+from exceptions.fim_de_jogo import FimDeJogo
+from models.tipo_item import Tipo
 class Personagem:
     def __init__(self, nome:str):
         self.nome = nome
@@ -13,7 +13,7 @@ class Personagem:
         self.__buffVida = 0
         self.__buffAtaque = 0
         self.__ataque = 10
-        self.__velocidade  = 5   
+        self.__velocidade  = 5.0   
         self.__buffVelocidade = 0
         self.__ataqueBase = 10
         self.__utilitarioEquipado = None
@@ -137,6 +137,7 @@ class Personagem:
         self.__buffVelocidade = buffV
         self.__ataque = int(ataque_total + buffA)
         self.__vida = int(vida_total)
+        self.__velocidade = self.__velocidade + buffV
     def equiparItems(self,arma:Item,vestimenta:Item,utilitario:Item):
         vazio_a= Item("Nenhum", "none", 0,Tipo.ARMA.value )
         vazio_v = Item("Nenhum", "none", 0,Tipo.VESTIMENTA.value )
@@ -228,8 +229,12 @@ class Personagem:
     def concluir_missao(self, e):
         #sucesso= missao.concluir_missao(valor)
         missao = e.missao
-        sucesso = e.comecar()
         #print(sucesso)
+        try:
+            sucesso = e.comecar()
+        except FimDeJogo:
+            missao._fracasso_missao()
+            raise FimDeJogo("") 
         if sucesso:
             missao._concluir_missao()
             print(f"Missão concluída com sucesso recebendo recompensa de: {missao.recompensa}")

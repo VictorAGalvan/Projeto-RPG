@@ -1,6 +1,6 @@
-from inimigo import Inimigo
-from missao import Missao
-from exception_geral import ExceptionGeral
+from models.inimigo import Inimigo
+from models.missao import Missao
+from exceptions.exception_geral import ExceptionGeral
 class MissaoCombate(Missao):
     def __init__(self, nome:str, descricao:str, recompensa:int, tipo_inimigo:Inimigo, inimigos_a_derrotar:int):
         self.tipo_inimigo = tipo_inimigo
